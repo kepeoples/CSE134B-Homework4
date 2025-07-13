@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project 1</title>
+</head>
+<body>
+  <header>
+    <h1>Project 1</h1>
+    <nav>
+      <a href="projects.html">Back to Projects</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>This is a detailed explanation of Project 1.</p>
+
+    <table>
+      <caption>Task Progress</caption>
+      <colgroup>
+        <!-- Normally you'd add color to columns using CSS.
+     Since CSS is not allowed, this is left unstyled. -->
+        <col span="1" >
+        <col span="1" >
+      </colgroup>
+      <tr>
+        <th>Task</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>Design</td>
+        <td><progress value="100" max="100"></progress></td>
+      </tr>
+      <tr>
+        <td>Development</td>
+        <td><progress value="80" max="100"></progress></td>
+      </tr>
+    </table>
+  </main>
+
+  <footer>
+    <my-footer></my-footer>
+  </footer>
+</body>
+</html>
