@@ -6,6 +6,4 @@ class HelloBox extends HTMLElement {
 }
 customElements.define('hello-box', HelloBox);
 
-// Semantic CSS element (like a footer)
-class MyFooter extends HTMLElement {}
-customElements.define('my-footer', MyFooter);
+
