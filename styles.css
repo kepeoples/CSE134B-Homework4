@@ -1,4 +1,4 @@
-/* === CSS VARIABLES (2 pts) === */
+/* === CSS VARIABLES (Light Theme) === */
 :root {
   --main-bg: #f5f5f5;
   --accent-color: #0077cc;
@@ -6,12 +6,20 @@
   --card-bg: #ffffff;
 }
 
+/* === DARK THEME VARIABLES === */
+:root[data-theme="dark"] {
+  --main-bg: #121212;
+  --accent-color: #66aaff;
+  --text-color: #f5f5f5;
+  --card-bg: #1e1e1e;
+}
+
 /* === BASE STYLES === */
 body {
   margin: 0;
   padding: 0;
   background-color: var(--main-bg);
-  color: var(--text-color, black);
+  color: var(--text-color);
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
@@ -21,12 +29,11 @@ body {
 main {
   flex: 1;
   padding: 1.5em;
-  min-height: 50dvh; /* Demonstrates dynamic viewport height */
+  min-height: 50dvh;
 }
 
-/* === TYPOGRAPHY === */
 h1, h2 {
-  font-size: 2em; /* Relative units (1 pt) */
+  font-size: 2em;
   margin-bottom: 0.5em;
 }
 
@@ -34,11 +41,12 @@ p {
   font-size: 1em;
 }
 
-/* === HEADER & NAV === */
+/* === HEADER & NAVIGATION === */
 header {
-  background-color: var(--accent-color);
+  background: linear-gradient(135deg, var(--accent-color), #005fa3);
   color: white;
   padding: 1em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 nav ul, nav {
@@ -52,11 +60,68 @@ nav ul, nav {
 nav a {
   color: white;
   text-decoration: none;
-  transition: color 0.3s ease; /* Transition (3 pts) */
+  transition: color 0.3s ease;
 }
 
 nav a:hover {
   color: #ffee88;
+}
+
+nav a:focus,
+nav a:active {
+  outline: 2px dashed #ffee88;
+  outline-offset: 2px;
+}
+
+/* === THEME TOGGLE STYLING === */
+#theme-toggle {
+  margin-left: auto;
+  margin-right: 1em;
+  transform: scale(1.5);
+  accent-color: var(--accent-color);
+}
+
+/* === FORM STYLING === */
+input:required,
+textarea:required {
+  border-left: 5px solid orange;
+}
+
+input:valid,
+textarea:valid {
+  border-left: 5px solid green;
+}
+
+input:invalid,
+textarea:invalid {
+  border-left: 5px solid red;
+}
+
+#charCount {
+  font-size: 0.9em;
+  color: gray;
+  margin-top: 0.25em;
+}
+
+#errorBox {
+  font-size: 0.95em;
+  color: red;
+  opacity: 0;
+  height: 1.2em;
+  transition: opacity 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.3s;
 }
 
 /* === BUTTON === */
@@ -72,6 +137,13 @@ button {
 
 button:hover {
   background-color: darkblue;
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+button:focus {
+  outline: 2px dashed #ffee88;
+  outline-offset: 2px;
 }
 
 /* === FOOTER === */
@@ -82,9 +154,9 @@ footer {
   padding: 1em;
 }
 
-/* === PROJECTS PAGE === */
+/* === PROJECTS === */
 main ul {
-  display: grid; /* Grid layout (10 pts) */
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1em;
   list-style: none;
@@ -97,32 +169,58 @@ main ul li {
   border: 1px solid #ccc;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-color);
 }
 
 main ul li:hover {
-  transform: translateY(-5px); /* Transform (3 pts) */
+  transform: translateY(-5px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* === PICTURE/DETAILS === */
+/* === DETAILS & PICTURES === */
 details {
   margin: 1em 0;
 }
 
 picture img {
-  width: 100%;            /* Viewport units (1 pt) */
+  width: 100%;
   max-width: 400px;
   height: auto;
   border-radius: 8px;
   border: 2px solid var(--accent-color);
-  object-fit: cover;           /* NEW */
-  object-position: center; 
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.3s ease;
 }
 
-/* === MEDIA QUERY (1 pt) === */
+picture img:hover {
+  transform: scale(1.03);
+}
+
+/* === RESPONSIVE NAVIGATION === */
 @media (max-width: 600px) {
   nav {
     flex-direction: column;
+  }
+
+  .menu-icon {
+    display: inline-block;
+    margin-bottom: 1em;
+  }
+
+  #menu-toggle {
+    display: none;
+    margin-bottom: 1em;
+  }
+
+  #nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  #menu-toggle:checked + .menu-icon + #nav-links {
+    display: flex;
   }
 }
 
@@ -139,45 +237,20 @@ picture img {
   }
 }
 
-/* CSS-only Hamburger Menu */
-#menu-toggle {
-  display: none;
-}
-
-.menu-icon {
-  display: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  background-color: var(--accent-color);
-  color: white;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-}
-
-@media (max-width: 600px) {
-  .menu-icon {
-    display: inline-block;
-    margin-bottom: 1em;
-  }
-
-  #nav-links {
-    display: none;
-    flex-direction: column;
-    gap: 1em;
-  }
-
-  #menu-toggle:checked + .menu-icon + #nav-links {
-    display: flex;
-  }
-}
-
-
-
-
-/* === CUSTOM FONT (2 pts) === */
+/* === CUSTOM FONT === */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-/* === SCOPED/NESTED-LIKE STYLING (4 pts) === */
+/* === ADDITIONAL SECTION STYLING === */
+main > section,
+main > article {
+  margin-bottom: 2em;
+  padding: 1.5em;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
 main article h2 {
   color: darkslateblue;
 }
@@ -190,50 +263,4 @@ main article summary {
 /* === SMOOTH SCROLL === */
 html {
   scroll-behavior: smooth;
-}
-
-/* === ENHANCED SECTION SPACING === */
-main > section, main > article {
-  margin-bottom: 2em;
-  padding: 1.5em;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* === IMPROVED HEADER GRADIENT === */
-header {
-  background: linear-gradient(135deg, var(--accent-color), #005fa3);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* === ACTIVE NAV LINK === */
-nav a:focus,
-nav a:active {
-  outline: 2px dashed #ffee88;
-  outline-offset: 2px;
-}
-
-/* === ADD TRANSITIONS TO IMG HOVER === */
-picture img:hover {
-  transform: scale(1.03);
-  transition: transform 0.3s ease;
-}
-
-/* === BUTTON HOVER + FOCUS ACCESSIBILITY === */
-button:focus {
-  outline: 2px dashed #ffee88;
-  outline-offset: 2px;
-}
-
-button:hover {
-  transform: scale(1.02);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* === MOBILE IMPROVEMENT: SPACED NAV BUTTON === */
-@media (max-width: 600px) {
-  #menu-toggle {
-    margin-bottom: 1em;
-  }
 }

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JS Enhanced Form</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #errorBox {
+      color: red;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      height: 1.2em;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Contact (JS Enhanced)</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="resume.html">Resume</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Get in Touch</h2>
+
+      <form id="contactForm" action="https://httpbin.org/post" method="POST" novalidate>
+        <fieldset>
+          <legend>Contact Form</legend>
+
+          <label for="name">Name:</label><br />
+          <input type="text" id="name" name="name" required /><br />
+
+          <label for="email">Email:</label><br />
+          <input type="email" id="email" name="email" required /><br />
+
+          <label for="comments">Message:</label><br />
+          <textarea id="comments" name="comments" rows="4" maxlength="150" required></textarea>
+          <div id="charCount"></div><br />
+
+          <label for="reason">Reason for Contact:</label><br />
+          <select id="reason" name="reason">
+            <option value="inquiry">General Inquiry</option>
+            <option value="feedback">Feedback</option>
+            <option value="collab">Collaboration</option>
+          </select><br /><br />
+
+          <input type="hidden" name="form-errors" id="formErrors" />
+          <div id="errorBox"></div><br />
+
+          <button type="submit">Send</button>
+        </fieldset>
+        <label>
+        <input type="checkbox" id="theme-toggle" />
+        Toggle Theme
+      </label>
+      </form>
+
+      <address>
+        Email me at: <a href="mailto:example@example.com">example@example.com</a>
+      </address>
+    </section>
+  </main>
+
+  <footer>
+    <my-footer></my-footer>
+  </footer>
+
+  <script src="custom-elements.js"></script>
+  <script>
+    const form = document.getElementById('contactForm');
+    const nameField = document.getElementById('name');
+    const emailField = document.getElementById('email');
+    const commentsField = document.getElementById('comments');
+    const errorBox = document.getElementById('errorBox');
+    const charCount = document.getElementById('charCount');
+    const errorsField = document.getElementById('formErrors');
+    let formErrors = [];
+
+    const illegalChars = /[^a-zA-Z\s]/;
+
+    // === Block disallowed characters (masking) ===
+    nameField.addEventListener('keypress', (e) => {
+      if (illegalChars.test(e.key)) {
+        e.preventDefault();
+        showError("Only letters and spaces allowed.");
+      }
+    });
+
+    // === Validation for illegal chars in case pasted ===
+    nameField.addEventListener('input', () => {
+      if (illegalChars.test(nameField.value)) {
+        nameField.setCustomValidity("Only letters and spaces allowed.");
+        showError("Name can only contain letters and spaces.");
+      } else {
+        nameField.setCustomValidity("");
+      }
+    });
+
+    // === Character count and warning for textarea ===
+    commentsField.addEventListener('input', () => {
+      const remaining = 150 - commentsField.value.length;
+      charCount.textContent = `${remaining} characters remaining`;
+
+      if (remaining <= 20) {
+        charCount.style.color = "orange";
+      } else {
+        charCount.style.color = "";
+      }
+
+      if (remaining < 0) {
+        commentsField.setCustomValidity("Message is too long.");
+        showError("Comments exceed character limit.");
+      } else {
+        commentsField.setCustomValidity("");
+      }
+    });
+
+    // === Show and fade error message ===
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.style.opacity = 1;
+      setTimeout(() => {
+        errorBox.style.opacity = 0;
+      }, 3000);
+    }
+
+    // === Submit handler to collect formErrors ===
+    form.addEventListener('submit', (e) => {
+      formErrors = [];
+
+      if (!nameField.checkValidity()) {
+        formErrors.push({ field: "name", message: nameField.validationMessage });
+      }
+
+      if (!emailField.checkValidity()) {
+        formErrors.push({ field: "email", message: emailField.validationMessage });
+      }
+
+      if (!commentsField.checkValidity()) {
+        formErrors.push({ field: "comments", message: commentsField.validationMessage });
+      }
+
+      if (formErrors.length > 0) {
+        e.preventDefault();
+        errorsField.value = JSON.stringify(formErrors);
+        showError("Please fix the errors before submitting.");
+      } else {
+        errorsField.value = JSON.stringify(formErrors); // will be "[]"
+      }
+    });
+  </script>
+</body>
+</html>
